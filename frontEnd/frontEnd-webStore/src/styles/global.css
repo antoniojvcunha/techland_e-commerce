@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../../.flowbite-react/class-list.json";
+
+
+.range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2px;
+    margin-top: 5px;
+    pointer-events: auto;
+  }
+  
+  .range-thumb::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 9999px;
+    background: #ef4444; /* vermelho */
+    cursor: pointer;
+    margin-top: -7px;
+    pointer-events: auto;
+    position: relative;
+    z-index: 50;
+  }
+  
+  .range-thumb::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 9999px;
+    background: #ef4444;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    color: #ef4444; /* Tailwind red-500 por exemplo */
+  }
+
+  .swiper-pagination-bullet {
+    background: #d1d5db;
+    opacity: 1; 
+  }
+  
+  .swiper-pagination-bullet-active {
+    background: #ef4444; 
+  }
+  
