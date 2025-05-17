@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import createCheckoutSession from "../services/checkoutService";
 
 const CheckoutButton = ({ cartItems, cartId, userId }) => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const CheckoutButton = ({ cartItems, cartId, userId }) => {
 
   const handleCheckout = async () => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       setError("You need to be authenticated to complete your purchase.");
       return;
@@ -19,33 +21,18 @@ const CheckoutButton = ({ cartItems, cartId, userId }) => {
     }
 
     setLoading(true);
+    setError(null);
 
     try {
-      const response = await fetch("http://localhost:3000/api/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cartId,
-          userId,
-        }),
-      });
+      const data = await createCheckoutSession({ cartId, userId, token });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          navigate("/orders");
-        }
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        setError(data.message || "Error creating checkout session.");
+        navigate("/orders");
       }
-    } catch (error) {
-      setError("An error occurred while processing your order. Please try again.");
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -53,7 +40,7 @@ const CheckoutButton = ({ cartItems, cartId, userId }) => {
 
   return (
     <div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
       <button
         onClick={handleCheckout}
         disabled={loading}

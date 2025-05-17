@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import Navbar from "../components/Navbar";
 import Breadcrumb from "../components/Breadcrumb";
 import Footer from "../components/Footer";
-import CheckoutButton from "../components/checkoutButton";
+import CheckoutButton from "../components/CheckoutButton";
 
 function CartView() {
   const { cartItems, updateQuantity, removeFromCart, loading, cartId } = useCart();

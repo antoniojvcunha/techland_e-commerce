@@ -9,10 +9,13 @@ async function createCart(userId) {
     };
 }
 
-async function getCartByUserId(userId) {
-    const [result] = await db.query("SELECT * FROM carts WHERE user_id = ? AND status = 'pending' LIMIT 1", [userId]);
-        return result[0] || null;
-    }
+async function getCartByUserId(userId, status = 'pending') {
+  const [result] = await db.query(
+    "SELECT * FROM carts WHERE user_id = ? AND status = ? LIMIT 1",
+    [userId, status]
+  );
+  return result[0] || null;
+}
 
 async function deleteCartByUserId(userId) {
     const [result] = await db.query("DELETE FROM carts WHERE user_id = ?", [userId]);

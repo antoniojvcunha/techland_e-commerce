@@ -14,7 +14,6 @@ async function checkout(req, res) {
 
     try {
         const cart = await cartService.getCartById(cartId);
-
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
@@ -40,7 +39,8 @@ async function checkout(req, res) {
 
         const order = await orderService.createOrder(user_id, formattedItems);
 
-        const success = await cartService.completeCart(cartId);
+        const success = await cartService.updateCartStatus(cartId, 'completed');
+
         if (!success) {
             return res.status(500).json({ message: "Failed to complete cart" });
         }
@@ -70,6 +70,10 @@ if (!updated) {
       return res.status(404).json({ message: "Order not found or not updated" });
     }
       const cart = await cartService.getCartByUserId(userId);
+if (!cart || cart.user_id !== userId || cart.status !== 'completed') {
+  return res.status(404).json({ message: "Cart not found or invalid" });
+}
+
 
  if (cart) {
         await cartService.updateCartStatus(cart.id, "completed");
